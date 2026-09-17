@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+Jinja2
+PyMuPDF
+google-genai
+faiss-cpu
+numpy

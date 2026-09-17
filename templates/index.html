@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperRoom — Research Paper Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">R</div>
+            <div>
+                <div class="brand-name">Paper<span>Room</span></div>
+                <div class="brand-kicker">Research Paper Assistant</div>
+            </div>
+        </div>
+
+        <div class="side-section">
+            <div class="section-label">READING ROOM</div>
+            <button class="upload-button" id="attachBtn" type="button">
+                <span class="upload-icon">↑</span>
+                <span><strong>Upload papers</strong><small>PDF files · up to 25 MB</small></span>
+            </button>
+            <input id="fileInput" type="file" accept=".pdf,application/pdf" multiple hidden>
+            <div id="uploadProgress" class="upload-progress hidden">
+                <span class="progress-dot"></span> Indexing your papers…
+            </div>
+            <div id="uploadPreview" class="upload-preview hidden"></div>
+        </div>
+
+        <div class="side-section papers-section">
+            <div class="section-heading">
+                <span class="section-label">INDEXED PAPERS</span>
+                <span id="docCount" class="count-badge">{{ stats.papers }}</span>
+            </div>
+            <div id="documentList" class="document-list">
+                {% if documents %}
+                    {% for document in documents %}
+                    <div class="document-item">
+                        <div class="pdf-icon">PDF</div>
+                        <span title="{{ document.name }}">{{ document.name }}</span>
+                        <small>{{ document.pages }}p · {{ document.chunks }}c</small>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-documents"><div class="empty-icon">+</div><span>No papers indexed yet.</span></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="index-status"><span class="status-pulse"></span><span>Knowledge base ready</span></div>
+            <button class="clear-button" id="clearBtn" type="button">Clear knowledge base</button>
+        </div>
+    </aside>
+
+    <main class="workspace">
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">DOCUMENT-GROUNDED RESEARCH</div>
+                <h1>Ask your papers.</h1>
+            </div>
+            <div class="top-meta">
+                <div class="stat"><span id="topDocCount">{{ stats.papers }}</span><small>papers</small></div>
+                <div class="meta-divider"></div>
+                <div class="stat"><span id="chunkCount">{{ stats.chunks }}</span><small>indexed chunks</small></div>
+            </div>
+        </header>
+
+        <section id="chatArea" class="chat-area">
+            <div id="welcomeState" class="welcome-state">
+                <div class="annotation">ANNOTATION 01</div>
+                <div class="welcome-grid">
+                    <div>
+                        <h2>A quieter way to<br><em>read research.</em></h2>
+                        <p>Upload one or more papers, then ask questions about what is actually inside them. Answers are grounded in your indexed documents.</p>
+                    </div>
+                    <div class="margin-note">
+                        <div class="note-pin"></div>
+                        <div class="note-title">Start with a useful question</div>
+                        <div class="note-text">Try one of the prompts below, or ask in your own words.</div>
+                    </div>
+                </div>
+
+                <div class="suggestions">
+                    <button class="suggestion" data-question="Summarize the main contribution of the paper."><span>01</span><b>Main contribution</b><small>What is this paper trying to add?</small></button>
+                    <button class="suggestion" data-question="What problem does the paper address, and why is it important?"><span>02</span><b>Research problem</b><small>Problem, motivation and context</small></button>
+                    <button class="suggestion" data-question="Explain the methodology, datasets, and algorithms used in the paper."><span>03</span><b>Methodology</b><small>Methods, data and algorithms</small></button>
+                    <button class="suggestion" data-question="What are the main findings and conclusions of the paper?"><span>04</span><b>Key findings</b><small>Results and conclusions</small></button>
+                    <button class="suggestion" data-question="What limitations and future work does the paper mention?"><span>05</span><b>Limitations</b><small>Gaps and future directions</small></button>
+                </div>
+            </div>
+        </section>
+
+        <div id="alertBox" class="alert hidden"></div>
+
+        <section class="composer-wrap">
+            <div class="composer-label"><span>YOUR QUESTION</span><span>Answers use uploaded papers only</span></div>
+            <div class="composer">
+                <textarea id="questionInput" rows="1" placeholder="Ask something about your research papers…"></textarea>
+                <button id="sendBtn" class="send-button" type="button"><span>Ask</span><span class="send-arrow">↗</span></button>
+            </div>
+            <div class="composer-hint">Enter to ask · Shift + Enter for a new line</div>
+        </section>
+    </main>
+</div>
+<script src="/static/script.js"></script>
+</body>
+</html>
